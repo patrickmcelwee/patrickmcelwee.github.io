@@ -1,0 +1,82 @@
+The Philosophy of Automation
+When we write code, we are automating processes. Most obviously, we are
+automating something for our customers: Given a set or range of business tasks,
+we try to write a finite number of rules to conjure computer processes to
+perform those tasks. If we do our job right, the users of the code are freed
+from the tedium of performing or even thinking about the steps to perform the
+task (until the tasks change and the finitude of our code is revealed).
+Automation upon automation allows us to create abstractions: "Print" instead of
+"Convert to printer-friendly format. Specify margins, etc. Send network message
+to printer, and so on."
+- The potential and pitfalls of automation: who benefits? who loses? Luddism, Marxism
+- Promise of open source?
+- What can we do as programmers to try to reduce the tendency of our work to create winners and losers? Can this incredible boost in productivity be harnessed to lift up everyone, not just the owners or those in the tech industry¿
+
+Weaken Your RSpec Mock Assertions
+'#with' a block, that allows you to set '#include' or whatever
+- also: kindOf, etc.
+- reference GOOS, which encourages weakest possible assertions and Avdi's
+  second part of Cowsay tutorial, which shows this RSpec block method.
+
+Implementing SIMPLE from Understanding Computation
+- version where I reduce and then wait + Benchmarking (1 million times)
+-- Book version is better, faster
+-- why? profile the code a little
+
+Triplestore Ontology Pattern: Predicates that imply type
+- example from extending Authorship
+- when should we imply type? OK to have different low-level predicates and
+  share higher-level abstraction? What does that mean for queries?
+- When creating queries, need to know about structure of each instance? Or can
+  you rely more on the abstractions? Should you do that and check type?
+
+Clean up merged git branches:
+git branch --merged | grep -v "\*" | xargs -n 1 git push --delete origin
+git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
+
+
+#Radical Code (Code Radicals? ProgressiveCode.com?)
+- Programmers helping change the world
+
+Custom Validator
+- app/validators in VivoAdmin
+- needed to share logic between two classes, validate presence of
+  associations, not counting those marked for deletion (and not deleting those
+marked for deletion!) - messy way of marking them for deletion in the form -
+could also consider in-model custom validation method - cite
+http://homeonrails.com/2012/10/associationcountvalidator/
+
+Data Model with a controlled vocabulary - HABTM or has_many :through instead of just has_many when there is
+a controlled vocabulary
+- work_types and artistic_roles in VIVO - has_many :through was easier to work
+  with in order to create complicated forms (eliminated some of the magic
+going on with an implicit join table)
+
+Not possible to use a FactoryGirl build strategy with has_many :through and a
+validation that the join model exists? See commits on 10/30/2013 in Vivo - it
+would create artistic_roles but not artistic_relationships_roles or vice versa
+until I actually created a model
+
+after_commit for nested attributes (like ArtisticWorkRelation) - after_create will not work because parent not yet saved
+
+Idiomatic Clojure (at least in Joy of Clojure) too terse. `cons` `conj`, `src`,
+etc, plus unfortunate tendency in JoC to use 'l' to represent a list, making me
+think of a 1. This adds an additional burden on understanding code. Indeed
+seems to be a difference in philosophy from Ruby (`initialize`). At one point,
+the authors of JoC apologize for the 'overly descriptive name
+sort-by-loved-ratio' for one of their functions (sorting a sequence of bands
+based on the number of loves over the number of plays). Although, Ruby does
+sometimes transgress (attr_accessor). Curious about the reasons for this. Is it
+archaic (like legacy database names)? Does it read easier for veterans?
+
+Functions as first-class - Clojure function composition feels like
+method-changing and creating functions to pass into, eg, sort-by in Clojure
+(see JoC chapter 7) are like blocks in Ruby. But passing around lambdas, while
+it can be done in Ruby, has not yet reached the level of idiomatic Ruby. Handy
+in several situations. 1. Dependency injection for loosely coupled tests and
+design. 2. Lazy evaluation. What else?
+
+Compare laziness in Clojure to laziness in Ruby (lambdas). Lambdas in Ruby are
+always lazy (until `call`ed). Is Clojure in some ways more eager, because it
+will evaluate at compile-time unless explicitly made lazy? Solved by lazy core
+functions and idioms as described in chapter 6 of JoC.

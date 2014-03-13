@@ -4,6 +4,15 @@ title:  "Reduce Redundant Coding: Quick Vim Config for Debugging Ruby"
 tags: ruby vim tools testing debugging
 ---
 
+When we write code, we are automating processes. Most obviously, we are
+automating something for our customers. But one thing I love about the act of
+programming is that there are so many levels where we can intervene with
+automation. Targets for automation are like the layers of an onion. Business
+rules on the outside, moving through automated deployments, server
+provisioning, networking, application routing, and so on, right down to
+everyday programmer tasks and even the keystrokes we enter into an editor or
+terminal. This low-level is where a good relationship with your editor really shines, and since we interact with our computers so much, some good optimization habits here can magnify your efficiency everywhere.
+
 When debugging a problem in my Ruby code, I *often* follow the same pattern:
 running and re-running (using a handy
 [Vimux](https://github.com/benmills/vimux) shortcut) a test that exercises the
@@ -17,14 +26,17 @@ visibility into the behavior of my code, this little technique packs a punch.
 But it is annoying and error-prone to have to correctly enter the name of the
 variable in question twice. Eliminating this kind of boilerplate is a natural
 job for a good editor. I am about to walk through my process for building up a
-Vim shortcut to handle this, but if a slow reveal doesn't interest you, here is
-my [end result](#end-result).
+Vim shortcut to handle this, but if a slow reveal doesn't interest you, you can
+skip to the [end result](#end-result).
 
 First, A Vim Macro
 ------------------
 
-Macros are a convenient way to explore and record keystrokes to accomplish a
-task generically enough that it can be repeated on different sections of code. (They can even be [resurrected each time you start Vim](http://vim.wikia.com/wiki/Macros#Saving_a_macro), giving them a quasi-permanent status.)
+Macros are a convenient way to explore and record a way to accomplish a
+task generically enough that it can be repeated on different sections of code.
+(Macros can even be [resurrected each time you start
+Vim](http://vim.wikia.com/wiki/Macros#Saving_a_macro), giving them a
+quasi-permanent status.)
 
 After I decided to automate this simple debugging, I decided to create a macro when creating the next `puts` statement.
 
