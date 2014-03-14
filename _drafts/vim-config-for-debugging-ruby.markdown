@@ -38,18 +38,41 @@ task generically enough that it can be repeated on different sections of code.
 Vim](http://vim.wikia.com/wiki/Macros#Saving_a_macro), giving them a
 quasi-permanent status.)
 
-After I decided to automate this simple debugging, I decided to create a macro when creating the next `puts` statement.
+After I decided to automate this simple debugging, I decided to create a macro
+when typing out the next `puts` statement. First, I positioned myself on the
+name of the variable I wished to inspect.
+
+To start a macro, type `q` followed by a second letter that names the register
+into which Vim will store your keystrokes. For example, I used the `p`
+registry: `qp`. Vim should now lets you know at the bottom of the editor that
+it is 'recording'.
+
+Then you just do your thing, but try to use smart commands that would work, for
+example, no matter how long the word is. [Vim's motion
+commands](http://vimdoc.sourceforge.net/htmldoc/motion.html), combined with
+[text-objects](http://blog.carbonfive.com/2011/10/17/vim-text-objects-the-definitive-guide/),
+are good candidates. The relation `h`, `j`, `k`, and `l` keys are usually poor
+choices.
+
+First I copied the current word into a register (`x`) I named using the `"`
+command: `"xyiw`. `yiw` 'yanks' the 'inner word' on which my cursor is
+positioned into that register.
+
+**FOOTNOTE** Actually I did something slightly less efficient originally, entering visual mode before yanking. It was only after looking at my recorded macro that I realized I could do the entire thing without going into visual mode.
 
 HERE!!
 
-Vim shortcut to puts out a variable on next line nnoremap <Leader>pt
-viw"xyoputs ": #{}"<esc>F:"xPf{"xp 
+Vim shortcut to puts out a variable on next line nnoremap 
+nnoremap <Leader>pt "xyiwoputs ": #{}"<esc>F:"xPf{"xp 
 - could also illustrate putting together something simple - started with a
   macro, then had to change '^[' to <esc> and account for no autoclose
 - original recorded macro: viw"xyoputs ": #{^[F:"xPf{"xp}"]}
 - then I realized that I wanted to put out more than just words - so wanted to
   be able to make a custom selection. For this, I can use vmap, cutting out the
 visual selection:
+
+later: inspect
+nnoremap <Leader>pit viw"xyoputs ": #{.inspect}"<esc>F:"xPf{"xp 
 
 ### <a name='end-result'></a>
     " Puts out value of a variable below current line
