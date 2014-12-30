@@ -1,6 +1,6 @@
-name: Patrick McElwee's Blog
+name: Patrick McElwee
 markdown: redcarpet
-pygments: true
+highlights: true
 #Github overrides
 safe: true
 lsi: false
