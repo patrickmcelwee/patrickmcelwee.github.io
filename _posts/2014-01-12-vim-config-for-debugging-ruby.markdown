@@ -76,7 +76,8 @@ puts "troublesome_variable: #{troublesome_variable}"
 Hit `q` again to stop recording.
 
 Now you can view your recorded macro, using Vim's `<Ctrl-r>`, which outputs the
-content of a register. In your `.vimrc`, in insert mode, type `<Ctrl-r><Ctrl-r>p` (assuming you recorded into the `p` buffer like me.)
+content of a register. In your `.vimrc`, in insert mode, type
+`<Ctrl-r><Ctrl-r>p` (assuming you recorded into the `p` register like me.)
 
 This should show you something like this:
 
@@ -145,7 +146,7 @@ THE END RESULT
 " Paste into .vimrc
 " Puts out value of a variable below current line
 " pt = put - a handy mnemonic
-nnoremap <Leader>pt  viw"xyoputs ": #{}"<esc>F:"xPf{"xp
+nnoremap <Leader>pt  "xyiwoputs ": #{}"<esc>F:"xPf{"xp
 nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
 vmap     <Leader>pt  "xyoputs ": #{}"<esc>F:"xPf{"xp
 vmap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
