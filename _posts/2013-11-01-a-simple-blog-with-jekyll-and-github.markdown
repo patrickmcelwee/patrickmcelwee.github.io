@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title:  "A Simple Blog with Jekyll and GitHub"
 date:   2013-11-01 15:50:34
 tags: jekyll github blogging
