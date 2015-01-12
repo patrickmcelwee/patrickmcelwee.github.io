@@ -5,13 +5,12 @@ tags: ruby vim tools testing debugging
 ---
 
 When we write code, we are automating. Most obviously, we are automating
-something for our customers. But one thing I love about programming is that
-there are so many levels for automation, like layers of an onion. Business
-rules on the outside, moving down through automated deployments, server
-provisioning, networking, application routing, and so on, right down to
-everyday programmer tasks, even the keystrokes we enter into an editor or
-terminal. Since we interact with our computers so often, good optimization
-habits here can magnify our efficiency everywhere.
+something for our customers. But there are so many levels for automation, like
+layers of an onion. Business rules on the outside, moving down through
+automated deployments, server provisioning, networking, application routing,
+and so on, right down to everyday programmer tasks, even the keystrokes we
+enter into an editor or terminal. Since we interact with our computers so
+often, good optimization habits here can magnify our efficiency everywhere.
 
 When debugging a problem in Ruby, I *often* follow the same pattern:
 running and re-running[<sup>1</sup>](#fn-vimux)  a test that exercises the
@@ -67,7 +66,9 @@ enter it: inside the string interpolation block. So jump to the beginning of
 the block with `f{` and paste the variable name again, this time after the
 cursor with little-p (`"xp`). And that's it! You should see:
 
-    puts "troublesome_variable: #{troublesome_variable}"
+{% highlight ruby %}
+puts "troublesome_variable: #{troublesome_variable}"
+{% endhighlight %}
 
 Hit `q` again to stop recording.
 
@@ -91,7 +92,13 @@ So, my cleaned-up version looks like:
 
 Now, I just add a `nnoremap` together with my desired shortcut in normal mode:
 
-    nnoremap <Leader>pt "xyiwoputs ": #{}"<esc>F:"xPf{"xp 
+{% highlight vim %}
+nnoremap <Leader>pt "xyiwoputs ": #{}"<esc>F:"xPf{"xp 
+{% endhighlight %}
+
+So now, if I position myself over that `troublesome_variable` and enter `<Leader>pt`, I get this:
+
+![puts a troublesome_variable]({{ site.url }}/assets/images/putsTroublesomeVariable.gif)
 
 Variations
 ---------
@@ -99,18 +106,30 @@ Variations
 So, that works fine when I only want to output a single variable, but often I
 want to see the result of something like
 `troublesome_variable.confusing_method`. For that, I need to be able to select
-all the text I want to inspect first. So, I can just tweak this to create a
+all the text I want to inspect first, like so:
+ 
+![puts a method call]({{ site.url }}/assets/images/putsRandomTimesTwo.gif)
+
+So, I can just tweak this to create a
 visual mode shortcut:
 
-    vmap <Leader>pt "xyoputs ": #{}"<esc>F:"xPf{"xp
+{% highlight vim %}
+vmap <Leader>pt "xyoputs ": #{}"<esc>F:"xPf{"xp
+{% endhighlight %}
 
 That is basically the same, except that it uses a simple yank `y` instead of
 yank-a-word `yiw`.
 
 Also, sometimes I want to `inspect` the value, so I can add `.inspect` to the skeleton:
 
-    nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
-    vmap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+{% highlight vim %}
+nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
+vmap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+{% endhighlight %}
+
+Which allows this:
+
+![inspect an object]({{ site.url }}/assets/images/inspectTroublesomeObject.gif)
 
 And so on. Now you have something to build on in case you find other use cases later.
 
@@ -118,18 +137,25 @@ THE END RESULT
 -------------
 
 ### <a name='end-result'></a>
-    " Paste into .vimrc
-    " Puts out value of a variable below current line
-    " pt = put - a handy mnemonic
-    nnoremap <Leader>pt  viw"xyoputs ": #{}"<esc>F:"xPf{"xp
-    nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
-    vmap     <Leader>pt  "xyoputs ": #{}"<esc>F:"xPf{"xp
-    vmap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+
+{% highlight vim %}
+" Paste into .vimrc
+" Puts out value of a variable below current line
+" pt = put - a handy mnemonic
+nnoremap <Leader>pt  viw"xyoputs ": #{}"<esc>F:"xPf{"xp
+nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
+vmap     <Leader>pt  "xyoputs ": #{}"<esc>F:"xPf{"xp
+vmap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+{% endhighlight %}
 
 A Good Habit
 ------
 
-[something on why do this]
+I find that tackling small optimizations like this, aside from the benefit to
+my productivity and increased knowledge about my editor, helps to keep me sharp
+and looking for beneficial automations elsewhere. And when I get too eager
+about automation, it provides a low-cost learning environment in which to start
+recognizing when the cost of automation exceeds the benefits.
 
 -------
 
@@ -139,4 +165,4 @@ A Good Habit
 efficient originally, entering visual mode before yanking. It was only after
 looking at my recorded macro that I realized I could do the entire thing
 without going into visual mode. This ability to see and analyze the recorded
-macro can be a big plus!
+macro can be a big plus.
