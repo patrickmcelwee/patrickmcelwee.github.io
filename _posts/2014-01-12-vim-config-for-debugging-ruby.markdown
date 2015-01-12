@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Quick Vim Config for Debugging Ruby"
+date: 2014-01-12 07:29:00
 tags: ruby vim tools testing debugging
 ---
 
@@ -16,7 +17,9 @@ When debugging a problem in Ruby, I *often* follow the same pattern:
 running and re-running[<sup>1</sup>](#fn-vimux)  a test that exercises the
 code in question, while sprinkling the code with statements like this:
 
-    puts "troublesome_variable: #{troublesome_variable}"
+{% highlight ruby %}
+puts "troublesome_variable: #{troublesome_variable}"
+{% endhighlight %}
 
 There are more sophisticated debugging tools, like [Pry](http://pryrepl.org/), but for quick
 visibility into the behavior of my code, this little technique packs a punch.
