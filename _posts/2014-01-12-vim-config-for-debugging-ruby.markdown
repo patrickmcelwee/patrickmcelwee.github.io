@@ -45,7 +45,7 @@ the variable I wished to inspect.
 
 To start a macro while in Vim's normal mode, type `q` followed by a second
 letter that names the register into which Vim will store your keystrokes. For
-example, I used the `p` registry: `qp`. Vim should now let you know at the
+example, I used the `p` register: `qp`. Vim should now let you know at the
 bottom of the editor that it is 'recording'.
 
 Then you just do your thing, but try to use smart commands that would work, for
@@ -61,11 +61,11 @@ positioned into that register.[<sup>2</sup>](#fn-yanking)
 
 Next, make a new line below the current one (`o`), and type the skeleton of the
 `puts` expression that we want (`puts ": #{}"`), followed by `<esc>` to go back
-to normal mode.
+into normal mode.
 
 Now, let's jump back to the colon with `F:` and paste the variable name from
 the `x` register *before* the colon with big-P (`"xP`). We have one more place to
-enter it: inside the string interpolation block. So jump to the beginning of
+paste it: inside the string interpolation block. So jump to the beginning of
 the block with `f{` and paste the variable name again, this time after the
 cursor with little-p (`"xp`). And that's it! You should see:
 
