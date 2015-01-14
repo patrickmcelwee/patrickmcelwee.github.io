@@ -2,6 +2,7 @@
 layout: post
 comments: true
 title:  "Quick Vim Config for Debugging Ruby"
+redirect_from: /test/test/test.html
 date: 2014-01-12 07:29:00
 tags: ruby vim tools testing debugging
 ---
