@@ -1,3 +1,5 @@
+Extract filter-with-results - Project Euler
+
 EXTRACT METHOD function
 
 Clojurescript to select the text of a DOM element, from
@@ -8,7 +10,9 @@ Working with Spree as a Rails engine - the pain of reaching into someone
 else's code to make modifications. The use of Module prepend instead of
 alias_method.
 
-Parentheses in Clojure - different lines to reduce refactor time
+Parentheses in Clojure - different lines to reduce refactor time - unless we
+know we have reached the final value, such as in a more mathematical function.
+For something like Om, more likely that we will have additions.
 
 The Philosophy of Automation
 When we write code, we are automating processes. Most obviously, we are
