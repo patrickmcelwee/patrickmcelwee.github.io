@@ -20,8 +20,8 @@ class PrimeFinder
   def prime?(n, known_primes)
     sqrt = Math.sqrt(n)
     known_primes.each do |x|
-      return true if x > sqrt
       return false if n % x == 0
+      return true if x > sqrt
     end
   end
 
