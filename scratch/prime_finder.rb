@@ -2,11 +2,9 @@ class Enumerator::Lazy
   def select_using_past_results
     primes = []
     Lazy.new(self) do |yielder, *values|
-      result = yield *values, primes
-      if result
-        real_value = values.first
-        primes << real_value
-        yielder << real_value
+      if yield *values, primes
+        primes << values.first
+        yielder << values.first
       end
     end
   end
@@ -20,8 +18,11 @@ class PrimeFinder
   end
 
   def prime?(n, known_primes)
-    sqrt = Math.sqrt(n) + 1
-    known_primes.take_while{|x| x < sqrt}.none? { |x| n % x == 0 }
+    sqrt = Math.sqrt(n)
+    known_primes.each do |x|
+      return true if x > sqrt
+      return false if n % x == 0
+    end
   end
 
 end
@@ -41,8 +42,9 @@ describe PrimeFinder do
   end
 
   it 'works for 10,001st prime' do
-    #non-optimized version takes about 600 msec
-    #'optimized' version takes about 900 msec
+    # non-optimized version takes about 600 msec
+    # 'optimized' version takes about 900 msec - trying to use take_while
+    # better optimized version takes 200 msecs
     expect(subject.nth_prime(10001)).to eq(104743)
   end
 end
