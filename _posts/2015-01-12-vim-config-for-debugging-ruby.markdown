@@ -130,7 +130,7 @@ Also, sometimes I want to `inspect` the value, so I can add `.inspect` to the sk
 
 {% highlight vim %}
 nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
-vnoremap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+vnoremap <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
 {% endhighlight %}
 
 Which allows this:
@@ -150,8 +150,8 @@ THE END RESULT
 " pt = put - a handy mnemonic
 nnoremap <Leader>pt  "xyiwoputs ": #{}"<esc>F:"xPf{"xp
 nnoremap <Leader>pit "xyiwoputs ": #{.inspect}"<esc>F:"xPf{"xp 
-vnoremap     <Leader>pt  "xyoputs ": #{}"<esc>F:"xPf{"xp
-vnoremap     <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
+vnoremap <Leader>pt  "xyoputs ": #{}"<esc>F:"xPf{"xp
+vnoremap <Leader>pit "xyoputs ": #{.inspect}"<esc>F:"xPf{"xp
 {% endhighlight %}
 
 A Good Habit
