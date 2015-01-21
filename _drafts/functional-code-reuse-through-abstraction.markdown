@@ -4,6 +4,12 @@ title:  "Code Reuse Through Abstraction in Functional Programming"
 tags: clojure functional-programming craftsmanship algorithms
 ---
 
+similar to EXTRACT METHOD in Ruby - extending Enumerable and Enumerator::Lazy?
+But even in Ruby, involves monkey-patching classes, and probably two different implementations - one for a lazy sequence like primes and one for a non-lazy sequence like the map/hash of players - in clojure, the seq abstraction covers both
+
+[Can we eval clojurescript in browser? Would it aid understanding, or just be
+cool?]
+
 I have been dabbling in functional programming, including putting a small
 ClojureScript app into production, and I love it. I also love object
 orientation, but I find that coding in a functional style, particularly in
@@ -137,11 +143,13 @@ Well, since functions are first-class, we can do that. Here is what
 
 The performance with `filter-using-past-results` is the same.
 
-I used the previous `primes` implementation as a template, but now instead of
-hard-coding `is-prime?`, we have the more general case of _any predicate
-function that can accept a sequence of `past-results`_. Also, rather than
-hard-coding the positive integers as the collection to be filtered, we allow
-any `collection` to be passed in.
+To write this new, rather abstract function, I used my previous `primes`
+implementation as a template, but now instead of hard-coding `is-prime?`, we
+have the more general case of _any predicate function that can accept a
+sequence of `past-results`_. Also, rather than hard-coding the positive
+integers as the collection to be filtered, we allow any `candidates` to be
+passed in. I also allowed for finite collections of `candidates` by checking to
+see if we have `emptied` that collection.
 
 The Code ReUse Finale (Tada!)
 ----------
