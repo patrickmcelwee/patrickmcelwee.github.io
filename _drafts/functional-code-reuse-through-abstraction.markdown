@@ -4,23 +4,14 @@ title:  "Code Reuse Through Abstraction in Functional Programming"
 tags: clojure functional-programming craftsmanship algorithms
 ---
 
-similar to EXTRACT METHOD in Ruby - extending Enumerable and Enumerator::Lazy?
-But even in Ruby, involves monkey-patching classes, and probably two different implementations - one for a lazy sequence like primes and one for a non-lazy sequence like the map/hash of players - in clojure, the seq abstraction covers both
+I have been dabbling in functional programming, including a production
+ClojureScript app, and I love it. I also love object orientation, but I find
+that coding in a functional style keeps things simpler and allows for elegant
+code reuse in a way that is more difficult with objects.
 
-[Can we eval clojurescript in browser? Would it aid understanding, or just be
-cool?]
-
-I have been dabbling in functional programming, including putting a small
-ClojureScript app into production, and I love it. I also love object
-orientation, but I find that coding in a functional style, particularly in
-Clojure, keeps things simpler and allows for elegant code reuse in a way that
-is difficult in practice with objects.
-
-Here is an example of what I mean. (If you don't already know Clojure, the
-details might be confusing. Fear not brave code-smith! You should be able to
-just read my descriptions, though, to get my point about code reuse through
-abstraction.) I was recently working on a Project Euler problem [link], to find
-the 10,001st prime number.
+Here is an example of what I mean. I was recently working on a [Project Euler
+problem](https://projecteuler.net/problem=7), to find the 10,001st prime
+number.
 
 Easy enough, with a naive implementation:
 
@@ -59,16 +50,18 @@ number of primes, `filter`ing over the positive integers output by `(range)`.
 This is possible because `filter` and `range` are both lazy. So, in the final
 `nth-prime` function, we can `take n (primes)` and no calculations will be made
 except those needed to get to the `n`-th prime. This kind of laziness is one
-way that Clojure encourages you to create functions that could be reused easily
-in other contexts - but that's a bit of an aside.
+way that Clojure encourages you to create more generic functions. I could have
+coded strictly to the requirement of finding 10,000 or so primes, but it was
+just as easy and efficient to create a function that will find as many primes
+as you like.
 
 Once you think about this problem of finding prime numbers, you quickly realize
 that, in order to determine if a given `candidate` is prime, you only need to
 check whether it is divisible by other prime numbers. All those other checks
 are waste.
 
-So, I wanted to maintain a running list of already-discovered primes. In object
-orientation, I might have maintained some inner state, but here, there is a
+So, I wanted to maintain a running list of already-discovered primes. In
+object-oriented mode, I might have maintained some state, but here, there is a
 fairly elegant solution that just passes the values around:
 
 {% highlight clojure %}
@@ -96,12 +89,6 @@ The `is-prime?` boolean function now knows about the `known-primes` and just
 checks that the `candidate` is `not-divisible?` by them (up to the
 square root of the `candidate`).
 
-The `primes` function cannot just use `filter` anymore, because now we have to
-keep track of the `known-primes`. So we basically embed an explicit filtering
-operation in the `primes` function - one that builds up the `known-primes`
-vector and passes it into `is-prime?` each time. We also have to use `lazy-seq`
-to keep that lovely laziness `filter` provided.
-
 And our optimization pays off:
 
 {% highlight clojure %}
@@ -110,11 +97,17 @@ user=> (time (nth-prime 10001))
 104743
 {% endhighlight %}
 
-Great! I noticed though, that there is a more abstract concept hiding in that
-messy `primes` function - the notion of *filtering-using-past-results*. It
-would be great to be able to recover the simplicity of the original `primes` by
-swapping out `filter` with a function that encapsulates this new concept. What
-I mean is that I would love to just write this:
+But the `primes` function got a whole lot more complicated! The `primes`
+function cannot just use `filter` anymore, because now we have to keep track of
+the `known-primes`. So I basically had to embed an explicit filtering operation
+in the `primes` function - one that builds up the `known-primes` vector and
+passes it into `is-prime?` each time. I also had to use `lazy-seq` to keep
+that lovely laziness `filter` provided.
+
+I noticed though, that there is a more abstract concept hiding in that messy
+`primes` function - the notion of *filtering-using-past-results*. It would be
+great to be able to recover the simplicity of the original `primes` by swapping
+out `filter` with a function that encapsulates this new concept. I would love to just write this:
 
 {% highlight clojure %}
 
@@ -141,25 +134,26 @@ Well, since functions are first-class, we can do that. Here is what
 
 {% endhighlight %}
 
-The performance with `filter-using-past-results` is the same.
+The performance with the extracted `filter-using-past-results` is the same as
+when it was embedded in `primes`.
 
 To write this new, rather abstract function, I used my previous `primes`
 implementation as a template, but now instead of hard-coding `is-prime?`, we
 have the more general case of _any predicate function that can accept a
 sequence of `past-results`_. Also, rather than hard-coding the positive
 integers as the collection to be filtered, we allow any `candidates` to be
-passed in. I also allowed for finite collections of `candidates` by checking to
-see if we have `emptied` that collection.
+passed in.[<sup>2</sup>](#fn-cheated) 
 
 The Code ReUse Finale (Tada!)
 ----------
 
-I was working in a very mathematical domain. But it was rather straightforward
-to create a highly abstract function that could be useful elsewhere. For
-example, when picking a middle-school 3-on-3 basketball team.
+I was working in a very mathematical domain when I wrote
+`filter-using-past-results`. But it was rather straightforward to create a
+highly abstract function that could be useful elsewhere. For example, when
+picking a middle-school 3-on-3 basketball team.
 
-Imagine I have a bunch of players and I want to pick three for my team. I don't
-want any two of them to play the same position, though. In fact, I would prefer to have less than 3 players, rather than two centers or two forwards or whatever.
+Imagine I have a bunch of players and I want to pick up to three for my team. I
+don't want any two of them to play the same position, though.
 
 So, we might have:
 
@@ -191,10 +185,43 @@ user=> (pick-team player-pool)
  {:position "point-guard", :name "Lachlan"}) )
 {% endhighlight %}
 
+Did you see how I used `filter-using-past-results` there?? Yep, the very same
+function.
+
+Now, of course, we can extract methods when writing objects, and we could even
+pull those methods out into parent classes or modules (I plan to write a
+follow-up showing how to apply this pattern in a lazy, quasi-functional way in
+Ruby 2.0.) But in Ruby, this kind of global re-use involves monkey-patching and
+more rigid object systems (looking at you Java) may not even allow it.
+
+In fact, most of the time, when we are writing methods within objects, we are
+so constrained by the context of our object (or interface or duck type), that I
+argue it is difficult to visualize the kind of widespread re-usability that is
+so natural with functions.
+
+In functional programming, particularly in Clojure, extracted functions are
+immediately available for use elsewhere (so long as you include them in the
+current namespace). They have broken free of the shackles of the class where
+they live, and more importantly from the mental boxes we build when working
+with objects. Freewheeling functions plus a small set of common data
+types[<sup>3</sup>](#fn-seq) means easy and natural (ecological?) coding for
+reuse.
+
 -------
 
 <a name="fn-bragging"><sup>1</sup></a> To give Clojure its fair share of
 bragging rights, I should note that I was comparing notes with a friend coding
-this up in XQuery, and his naive implementation took 59 seconds! With a bunch
+this up in XQuery, and his naive implementation took 59 seconds. With a bunch
 of optimizations, he got that down to 8 seconds. But compiling down to Java
 bytecode certainly has its benefits.
+
+<a name="fn-cheated"><sup>2</sup></a> I also cheated and allowed for finite
+collections of `candidates` - by checking to see if we have `emptied` that
+collection. I realized that was a good idea only after I tried to reuse this
+function on the finite collection of possible b-ball players. Again, it makes
+this more generic without imposing a large cost.
+
+<a name="fn-seq"><sup>3</sup></a> These data types in Clojure are further
+united by the sequence abstraction, a wonderful thing that you can read about
+in the amazingly delightful [Clojure for the Brave and
+True](http://www.braveclojure.com/core-functions-in-depth/#2__The_Sequence_Abstraction).
