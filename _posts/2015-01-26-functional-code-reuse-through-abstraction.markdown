@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Code Reuse Through Abstraction in Functional Programming"
+date: 2015-01-26 22:45:00
 tags: clojure functional-programming craftsmanship algorithms
 ---
 
