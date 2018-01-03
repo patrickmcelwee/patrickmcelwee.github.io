@@ -1,9 +1,7 @@
 name: Patrick McElwee
-markdown: redcarpet
 highlights: true
-highlighter: pygments
 #Github overrides
 safe: true
 lsi: false
-gems:
+plugins:
   - jekyll-redirect-from
